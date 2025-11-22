@@ -25,15 +25,14 @@ int obtenerLetra(int valor, int abecedario[26]) {
 }
 
 /*funcion para calcular la inversa de la matriz clave*/
-void matrizInversa(int clave[FILAS][FILAS], double inversa[FILAS][FILAS]) {
-    double det = clave[0][0]*(clave[1][1]*clave[2][2] - clave[1][2]*clave[2][1])
-               - clave[0][1]*(clave[1][0]*clave[2][2] - clave[1][2]*clave[2][0])
-               + clave[0][2]*(clave[1][0]*clave[2][1] - clave[1][1]*clave[2][0]);
+void matrizInversa(int clave[FILAS][FILAS], float inversa[FILAS][FILAS]) {
+    float det = clave[0][0]*(clave[1][1]*clave[2][2] - clave[1][2]*clave[2][1]) - clave[0][1]*(clave[1][0]*clave[2][2] - clave[1][2]*clave[2][0]) + clave[0][2]*(clave[1][0]*clave[2][1] - clave[1][1]*clave[2][0]);
     if (det == 0) {
         printf("La matriz clave no es invertible.\n");
         exit(1);
     }
-    double invDet = 1.0 / det;
+    float invDet = 1.0 / det;
+
     inversa[0][0] = invDet * (clave[1][1]*clave[2][2] - clave[1][2]*clave[2][1]);
     inversa[0][1] = invDet * (clave[0][2]*clave[2][1] - clave[0][1]*clave[2][2]);
     inversa[0][2] = invDet * (clave[0][1]*clave[1][2] - clave[0][2]*clave[1][1]);
@@ -64,7 +63,7 @@ int main () {
     int numeroMatrices = 0;
     int capacidadMatriz = FILAS * COLUMNAS;
     int claveHill[FILAS][FILAS] = {{1,2,3},{0,4,5},{1,0,6}}; //matriz clave
-    double inversaClave[FILAS][FILAS];
+    float inversaClave[FILAS][FILAS];
     int matrizDecifrada[MAX][FILAS][COLUMNAS] = {0}; //MAX representa el numero maximo de matrices
 
     /*leer archivo con valores de las letras*/
@@ -114,6 +113,22 @@ int main () {
 
         /*decifrado de hills*/
         matrizInversa(claveHill, inversaClave);
+        for(m = 0; m < numeroMatrices; m++) {
+            for(i = 0; i < FILAS; i++) {
+                matrizDecifrada[m][i][0] = 0; //inicializar
+                for(j = 0; j < FILAS; j++) {
+                    matrizDecifrada[m][i][0] += round(inversaClave[i][j] * obtenerValor(matriz[m][j][0], abecedario));
+                }
+                //ajustar valor al rango del abecedario
+                while (matrizDecifrada[m][i][0] < abecedario[0]) {
+                    matrizDecifrada[m][i][0] += 26;
+                }
+                while (matrizDecifrada[m][i][0] > abecedario[25]) {
+                    matrizDecifrada[m][i][0] -= 26;
+                }
+            }
+        }
+        
 
     }
 
