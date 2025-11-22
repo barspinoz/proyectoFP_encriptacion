@@ -26,22 +26,28 @@ int obtenerLetra(int valor, int abecedario[26]) {
 
 /*funcion para calcular la inversa de la matriz clave*/
 void matrizInversa(int clave[FILAS][FILAS], float inversa[FILAS][FILAS]) {
-    float det = clave[0][0]*(clave[1][1]*clave[2][2] - clave[1][2]*clave[2][1]) - clave[0][1]*(clave[1][0]*clave[2][2] - clave[1][2]*clave[2][0]) + clave[0][2]*(clave[1][0]*clave[2][1] - clave[1][1]*clave[2][0]);
-    if (det == 0) {
+    float a00 = clave[0][0], a01 = clave[0][1], a02 = clave[0][2];
+    float a10 = clave[1][0], a11 = clave[1][1], a12 = clave[1][2];
+    float a20 = clave[2][0], a21 = clave[2][1], a22 = clave[2][2];
+
+    float det = a00*(a11*a22 - a12*a21) - a01*(a10*a22 - a12*a20) + a02*(a10*a21 - a11*a20);
+    if (fabsf(det) < 1e-6f) {
         printf("La matriz clave no es invertible.\n");
         exit(1);
     }
-    float invDet = 1.0 / det;
+    float invDet = 1.0f / det;
 
-    inversa[0][0] = invDet * (clave[1][1]*clave[2][2] - clave[1][2]*clave[2][1]);
-    inversa[0][1] = invDet * (clave[0][2]*clave[2][1] - clave[0][1]*clave[2][2]);
-    inversa[0][2] = invDet * (clave[0][1]*clave[1][2] - clave[0][2]*clave[1][1]);
-    inversa[1][0] = invDet * (clave[1][2]*clave[2][0] - clave[1][0]*clave[2][2]);
-    inversa[1][1] = invDet * (clave[0][0]*clave[2][2] - clave[0][2]*clave[2][0]);
-    inversa[1][2] = invDet * (clave[0][2]*clave[1][0] - clave[0][0]*clave[1][2]);
-    inversa[2][0] = invDet * (clave[1][0]*clave[2][1] - clave[1][1]*clave[2][0]);
-    inversa[2][1] = invDet * (clave[0][1]*clave[2][0] - clave[0][0]*clave[2][1]);
-    inversa[2][2] = invDet * (clave[0][0]*clave[1][1] - clave[0][1]*clave[1][0]);
+    inversa[0][0] = invDet * (a11*a22 - a12*a21);
+    inversa[0][1] = invDet * (-(a01*a22 - a02*a21));
+    inversa[0][2] = invDet * (a01*a12 - a02*a11);
+
+    inversa[1][0] = invDet * (-(a10*a22 - a12*a20));
+    inversa[1][1] = invDet * (a00*a22 - a02*a20);
+    inversa[1][2] = invDet * (-(a00*a12 - a02*a10));
+
+    inversa[2][0] = invDet * (a10*a21 - a11*a20);
+    inversa[2][1] = invDet * (-(a00*a21 - a01*a20));
+    inversa[2][2] = invDet * (a00*a11 - a01*a10);
 }
 
 int main () {
@@ -115,16 +121,12 @@ int main () {
         matrizInversa(claveHill, inversaClave);
         for(m = 0; m < numeroMatrices; m++) {
             for(i = 0; i < FILAS; i++) {
-                matrizDecifrada[m][i][0] = 0; //inicializar
-                for(j = 0; j < FILAS; j++) {
-                    matrizDecifrada[m][i][0] += round(inversaClave[i][j] * obtenerValor(matriz[m][j][0], abecedario));
-                }
-                //ajustar valor al rango del abecedario
-                while (matrizDecifrada[m][i][0] < abecedario[0]) {
-                    matrizDecifrada[m][i][0] += 26;
-                }
-                while (matrizDecifrada[m][i][0] > abecedario[25]) {
-                    matrizDecifrada[m][i][0] -= 26;
+                for(j = 0; j < COLUMNAS; j++) {
+                    matrizDecifrada[m][i][j] = 0;
+                    for(n = 0; n < FILAS; n++) {
+                        matrizDecifrada[m][i][j] += inversaClave[i][n] * obtenerValor(matriz[m][n][j], abecedario);
+                    }
+                    matrizDecifrada[m][i][j] %= 26;
                 }
             }
         }
