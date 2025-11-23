@@ -44,8 +44,8 @@ def decifrarHills():
     matriz_clave = np.array([[1, 2, 2],
                             [0, 1, 4],
                             [5, 0, 1]]) # matriz clave
-    print("Matriz Clave:")
-    print(matriz_clave)
+    # print("Matriz Clave:") # impresion de la matriz clave (debug)
+    # print(matriz_clave)
 
     # calcular la inversa modular de la matriz clave modulo 26
     try:
@@ -53,8 +53,8 @@ def decifrarHills():
     except ValueError as e:
         print("Error al invertir la matriz clave:", e)
         return None
-    print("Matriz Inversa (mod 26):")
-    print(matriz_inversa)
+    # print("Matriz Inversa (mod 26):") # impresion de la matriz inversa de la clave (debug)
+    # print(matriz_inversa)
 
     # darle valor numerico a cada letra del alfabeto (empezando en 0)
     alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -78,7 +78,7 @@ def decifrarHills():
     # rellenar con 'X' para que la longitud sea múltiplo de 3
     while len(texto_cifrado) % 3 != 0:
         texto_cifrado += "X"
-    print("Texto Cifrado (procesado, padded):")
+    print("Texto Cifrado (procesado):")
     print(texto_cifrado)
 
     # pasar el texto cifrado a numeros
@@ -107,7 +107,7 @@ def decifrarHills():
     # guardar el texto descifrado en un archivo
     with open("descifrado.txt", "w") as f:
         f.write(texto_descifrado)
-    print("El texto descifrado ha sido guardado en 'descifrado.txt'.")
+    print("* El texto descifrado ha sido guardado en 'descifrado.txt'.")
     return texto_descifrado
 
 if __name__ == "__main__":
