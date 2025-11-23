@@ -41,9 +41,9 @@ def matrix_mod_inv_3x3(mat, m):
     return inv_mat.astype(int)
 
 def decifrarHills():
-    matriz_clave = np.array([[1, 2, 3],
-                       [0, 4, 5],
-                       [1, 0, 6]]) # matriz clave
+    matriz_clave = np.array([[1, 2, 2],
+                            [0, 1, 4],
+                            [5, 0, 1]]) # matriz clave
     print("Matriz Clave:")
     print(matriz_clave)
 

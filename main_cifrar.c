@@ -40,7 +40,7 @@ int main () {
     int longitud = 0;
     int numeroMatrices = 0;
     int capacidadMatriz = FILAS * COLUMNAS;
-    int claveHill[FILAS][FILAS] = {{1,2,3},{0,4,5},{1,0,6}}; //matriz clave
+    int claveHill[FILAS][FILAS] = {{1,2,2},{0,1,4},{5,0,1}}; //matriz clave
     int matrizCifrada[MAX][FILAS][COLUMNAS] = {0}; //MAX representa el numero maximo de matrices
 
     /*leer archivo con valores de las letras*/
